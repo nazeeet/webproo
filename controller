@@ -13,6 +13,29 @@ class PegawaiController extends Controller
         return view('pegawai', ['pegawais' => $pegawais]);
     }
 
+    public function create()
+    {
+        $pegawai = new Pegawai;
+        return view('create', ['pegawai' => $pegawai]);
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'posisi' => 'required|max:255',
+            'gaji' => 'required|numeric',
+        ]);
+
+        $pegawai = new Pegawai;
+        $pegawai->name = $validatedData['name'];
+        $pegawai->posisi = $validatedData['posisi'];
+        $pegawai->gaji = $validatedData['gaji'];
+        $pegawai->save();
+
+        return redirect('/');
+    }
+
     public function edit(string $id)
     {
         $pegawai = Pegawai::find($id);
@@ -39,5 +62,4 @@ class PegawaiController extends Controller
 
         return redirect('/');
     }
-
 }
